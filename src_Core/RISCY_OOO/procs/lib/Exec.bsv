@@ -234,7 +234,9 @@ function Bool memAddrMisaligned(Addr addr, ByteEn byteEn);
 endfunction
 
 function Data gatherLoad(Addr addr, ByteEn byteEn, Bool unsignedLd, Data data);
-    function extend = unsignedLd ? zeroExtend : signExtend;
+    function Data extend(Bit#(n) w) provisos (Add#(n,pad,SizeOf#(Data)));
+        return (unsignedLd ? zeroExtend(w) : signExtend(w));
+    endfunction
     Bit#(IndxShamt) offset = truncate(addr);
 
     if(byteEn[7]) begin
